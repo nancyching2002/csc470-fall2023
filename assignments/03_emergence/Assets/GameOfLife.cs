@@ -39,28 +39,43 @@ public class GameOfLife : MonoBehaviour
                 // (the 'alive' variable.
 
                 cells[x, y] = cellObj.GetComponent<CellScript>();
-                
+
                 //Save position of cell in itself
                 cells[x, y].positionX = x;
                 cells[x, y].positionY = y;
 
                 //Set cell random state
                 //20% of time will be true
-                cells[x,y].lifeState = (Random.value < 0.2f);
+                cells[x, y].lifeState = (Random.value < 0.2f);
 
-                if (x == gridSize-1 && y == 0) {
-                    GameObject playerObj = Instantiate(playerPrefab, pos + new Vector3(0,2,0), transform.rotation);
+                if (x == gridSize/2 && y == gridSize/2)
+                {
+                    GameObject playerObj = Instantiate(playerPrefab, pos + new Vector3(0, 100, 0), transform.rotation);
                 }
             }
         }
 
-        
+
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown("space"))
         
+        {
+            for (int x = 0; x < gridSize; x++)
+            {
+                for (int y = 0; y < gridSize; y++)
+                {
+                    cells[x, y].lifeState = cells[x, y].nextLifeState;
+                    cells[x, y].aliveBefore = cells[x, y].nextAliveBefore;
+                }
+
+            }
+        }
+
     }
+
 }

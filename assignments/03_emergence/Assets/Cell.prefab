@@ -151,9 +151,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifeState: 1
+  nextLifeState: 0
   positionX: -1
   positionY: -1
-  aliveColor: {r: 0, g: 1, b: 0.0229671, a: 0}
+  aliveColor: {r: 0, g: 0.4528302, b: 0.010654882, a: 0}
   deadColor: {r: 1, g: 0, b: 0, a: 0}
-  AliveBeforeColor: {r: 1, g: 0.83582294, b: 0, a: 0}
+  AliveBeforeColor: {r: 0.509434, g: 0.23518051, b: 0.21338554, a: 0}
   aliveBefore: 0
+  nextAliveBefore: 0

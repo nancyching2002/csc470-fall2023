@@ -14,7 +14,6 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
         Vec = transform.localPosition;  
-        Vec.y = Vec.y + Input.GetAxis("Jump") * Time.deltaTime * 30;  
         Vec.z = Vec.z + Input.GetAxis("Horizontal") * Time.deltaTime * 5;  
         Vec.x = Vec.x - Input.GetAxis("Vertical") * Time.deltaTime * 5;  
         transform.localPosition = Vec;  

@@ -247,7 +247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cellPrefab: {fileID: 8849520278804470175, guid: e5f6206ed0f814b89a0b44eeb9bed976, type: 3}
-  playerPrefab: {fileID: 6725357225401926468, guid: bea2a00791689034dba97e38f74692fc, type: 3}
+  playerPrefab: {fileID: 1668112114360340677, guid: 28b100a9d645f8c47a7269c801a81bac, type: 3}
   gridSize: 0
 --- !u!4 &602878199
 Transform:
@@ -349,8 +349,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 987725152}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.17040487, y: 0.68607306, z: -0.1703023, w: -0.68648607}
-  m_LocalPosition: {x: 141.87772, y: 41.582634, z: 53.105957}
+  m_LocalRotation: {x: -0.1621582, y: 0.6880666, z: -0.16206062, w: -0.68848056}
+  m_LocalPosition: {x: 153.58696, y: 47.42221, z: 53.09892}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

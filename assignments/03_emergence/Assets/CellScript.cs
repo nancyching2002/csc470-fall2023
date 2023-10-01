@@ -5,6 +5,7 @@ using UnityEngine;
 public class CellScript : MonoBehaviour
 {
     public bool lifeState;
+    public bool nextLifeState;
     GameOfLife gol;
     Vector3 Vec;
     public int positionX = -1;
@@ -13,6 +14,7 @@ public class CellScript : MonoBehaviour
     public Color deadColor;
     public Color AliveBeforeColor;
     public bool aliveBefore;
+    public bool nextAliveBefore;
     Renderer rend;
 
     // Start is called before the first frame update
@@ -24,7 +26,8 @@ public class CellScript : MonoBehaviour
 
         //Cell visuals is the child of the object
         rend = gameObject.GetComponentInChildren<Renderer>();
-        aliveBefore = lifeState;
+
+        nextAliveBefore = lifeState;
         updateColor();
 
     }
@@ -38,43 +41,50 @@ public class CellScript : MonoBehaviour
         }
     }
 
-    void Lifecycle()
+    public void Lifecycle()
     {
-        if (lifeState)
+        if (lifeState == true)
         {
-            if (CountLiveNeighbors() == 2 || CountLiveNeighbors() == 3)
+            if (CountLiveNeighbors()-1 == 2 || CountLiveNeighbors()-1 == 3)
             {
-                lifeState = true;
+                nextLifeState = true;
+                nextAliveBefore = true;
             }
-            else if (CountLiveNeighbors() <= 4 || CountLiveNeighbors() == 1 || CountLiveNeighbors() == 0)
+            else if (CountLiveNeighbors()-1 >= 4 || CountLiveNeighbors()-1 <= 1)
             {
-                lifeState = false;
+                nextLifeState = false;
             }
         }
-        else
+        else if (lifeState == false)
         {
             if (CountLiveNeighbors() == 3)
             {
-                lifeState = true;
+                nextLifeState = true;
+                nextAliveBefore = true;
             }
         }
-        updateColor();
-        moveIfAlive();
+
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {   
         Lifecycle();
-
+        updateColor();
+        moveIfAlive();
+        
     }
+
+
+
     void updateColor()
     {
         if (lifeState)
         {
             rend.material.color = aliveColor;
         }
-        else if (aliveBefore) {
+        else if (aliveBefore)
+        {
             rend.material.color = AliveBeforeColor;
         }
         else
@@ -84,14 +94,14 @@ public class CellScript : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        lifeState = !lifeState;
-        updateColor();
+        //lifeState = !lifeState;
+        //updateColor();
+        Debug.Log("Count: "+CountLiveNeighbors()+"Next life state: " + nextLifeState);
     }
 
     int CountLiveNeighbors()
     {
-        //Does not count itself - minus 1
-        int alive = -1;
+        int alive = 0;
 
         //Corner edge case
         if (positionY == 0 && positionX == 0)
