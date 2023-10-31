@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         speed.text = PlaneController.speed.ToString();
 
         if (score == 15) {
-            gameDirections.text = "Something appear on the ground! Land the plane and check it out!" + "\n" + "\n" + "Slow the plane down and approach the ground.";
+            gameDirections.text = "Something appear on the ground! Land the plane and check it out!" + "\n" + "\n" + "Slow the plane down (speed < 10) and approach the ground.";
             islands.SetActive(true);
         }
 

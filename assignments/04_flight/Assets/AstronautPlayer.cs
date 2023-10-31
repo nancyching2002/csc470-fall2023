@@ -9,8 +9,6 @@ using TMPro;
 		public Camera cameraObject;
 		Vector3 oldCamPos;
 
-		public TMP_Text win;
-
 		// These are the variables that will scale the effect of the movement, gravity,
 		// and rotation code in update.
 		float forwardSpeed = 6;
@@ -21,10 +19,6 @@ using TMPro;
 
 		//Jump variables
 		public int doubleJump = 0;
-
-		//Win
-		public bool won = false;
-
 
 		void Start () {
 			controller = GetComponent<CharacterController>();
@@ -38,13 +32,6 @@ using TMPro;
 			{
 				doubleJump+= 1;
 				Debug.Log(doubleJump);
-			}
-			if (other.CompareTag("Treasure"))
-			{
-				//You win!
-				won = true;
-				Debug.Log("WON");
-            	win.enabled = true;
 			}
 		}
 

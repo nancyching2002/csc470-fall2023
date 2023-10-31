@@ -8,6 +8,7 @@ TagManager:
   - Coin
   - Plane
   - Power
+  - Treasure
   layers:
   - Default
   - TransparentFX

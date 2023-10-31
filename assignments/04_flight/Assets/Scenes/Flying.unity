@@ -2796,7 +2796,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9877eb3c7156c8541833048c526f43b4, type: 3}
       propertyPath: m_Name
-      value: model
+      value: Treasure
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9877eb3c7156c8541833048c526f43b4, type: 3}
+      propertyPath: m_TagString
+      value: Treasure
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2808,6 +2812,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9877eb3c7156c8541833048c526f43b4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1772049091}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9877eb3c7156c8541833048c526f43b4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1772049093}
   m_SourcePrefab: {fileID: 100100000, guid: 9877eb3c7156c8541833048c526f43b4, type: 3}
 --- !u!1 &1101485227
 GameObject:
@@ -4416,7 +4423,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1497580950
 Transform:
   m_ObjectHideFlags: 0
@@ -5342,6 +5349,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1772049093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772049089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 268ad354cdd7e004da3ed7abaf206d44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  win: {fileID: 1025728312}
 --- !u!1 &1816883984
 GameObject:
   m_ObjectHideFlags: 0
