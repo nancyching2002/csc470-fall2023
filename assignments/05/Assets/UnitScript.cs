@@ -12,6 +12,10 @@ public class UnitScript : MonoBehaviour
     Color defaultColor;
 
     float moveSpeed = 5;
+    public float health = 100;
+    public float currentHealth;
+
+    public HealthBar healthBar;
 
     bool hover = false;
     public bool selected = false;
@@ -24,6 +28,9 @@ public class UnitScript : MonoBehaviour
     {
         defaultColor = bodyRenderer.material.color;
         GameManager.SharedInstance.units.Add(this);
+
+        currentHealth = health;
+        healthBar.SetMaxHealth(health);
     }
 
     private void OnDestroy()
@@ -34,6 +41,13 @@ public class UnitScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Health
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            TakeDamage(10f);
+        }
+
+        //Move
         if (hasTarget)
         {
             Vector3 vectorToTarget = (target - transform.position).normalized;
@@ -43,6 +57,12 @@ public class UnitScript : MonoBehaviour
                 hasTarget = false;
             }
         }
+    }
+
+    void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
     }
 
     public void SetTarget(Vector3 t)
