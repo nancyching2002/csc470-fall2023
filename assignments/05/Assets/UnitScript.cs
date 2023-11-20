@@ -7,6 +7,8 @@ public class UnitScript : MonoBehaviour
     public Renderer bodyRenderer;
     public CharacterController cc;
 
+    public string name;
+
     public Color selectedColor;
     public Color hoverColor;
     Color defaultColor;
