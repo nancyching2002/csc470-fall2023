@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UnitScript : MonoBehaviour
 {
+
     public Renderer bodyRenderer;
     public CharacterController cc;
 
