@@ -10,7 +10,14 @@ public class GameManager : MonoBehaviour
     public List<UnitScript> units = new List<UnitScript>();
     public GameObject unitPrefab;
 
+    //Magic
+    public GameObject magic;
+
+    public List<EnemyScript> enemies = new List<EnemyScript>();
+    public GameObject enemyPrefab;
+
     UnitScript selectedUnit;
+    EnemyScript selectedEnemy;
     
     void Awake()
     {
@@ -26,7 +33,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Click");
+
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 999999))
@@ -37,21 +44,40 @@ public class GameManager : MonoBehaviour
                     // contains info about what we hit.
                     if (selectedUnit != null)
                     {
-                        Debug.Log("Set target");
                         selectedUnit.SetTarget(hit.point);
+                    }
+                }
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                {
+                    if (selectedUnit != null)
+                    {
+                        selectedUnit.SetTargetAttack(hit.point);
+
                     }
                 }
             }
         }
     }
 
+    public void AttackEnemy()
+    {
+        selectedEnemy.TakeDamage(100f);   
+    }
+
+
+    public void AttackPlayer()
+    {
+        selectedUnit.TakeDamage(1f);   
+    }
+
+    public void SelectEnemy(EnemyScript enemy)
+    {
+        selectedEnemy = enemy;
+        selectedEnemy.selected = true;
+    }
+
     public void SelectUnit(UnitScript unit)
     {
-        // Deselect any units that think they are selected
-        foreach (UnitScript u in units) {
-            u.selected = false;
-            u.SetUnitColor();
-        }
         selectedUnit = unit;
         selectedUnit.selected = true;
         selectedUnit.SetUnitColor();

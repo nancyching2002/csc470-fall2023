@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class UnitScript : MonoBehaviour
 {
-
+    //Hover/Select color
     public Renderer bodyRenderer;
     public CharacterController cc;
 
-    public string name;
+    //Magic
+    public GameObject magic;
+
 
     public Color selectedColor;
     public Color hoverColor;
@@ -19,12 +21,15 @@ public class UnitScript : MonoBehaviour
     public float currentHealth;
 
     public HealthBar healthBar;
+    float damage = 10f;
 
     bool hover = false;
     public bool selected = false;
 
     Vector3 target;
+    Vector3 enemyTarget;
     bool hasTarget = false;
+    bool hasEnemyTarget = false;
 
     // Start is called before the first frame update
     void Start()
@@ -41,28 +46,47 @@ public class UnitScript : MonoBehaviour
         GameManager.SharedInstance.units.Remove(this);
     }
 
+
     // Update is called once per frame
     void Update()
     {
-        //Health
-        if (Input.GetKeyDown(KeyCode.Space))
+        //If enemy has been clicked, check if the player is close then attack
+        if (hasEnemyTarget)
         {
-            TakeDamage(10f);
+            if (Vector3.Distance(transform.position, enemyTarget) < 3f)
+            {
+                Debug.Log("Attacking");
+                GameManager.SharedInstance.AttackEnemy();
+            }
         }
 
         //Move
         if (hasTarget)
         {
             Vector3 vectorToTarget = (target - transform.position).normalized;
+
+            float step = 5 * Time.deltaTime;
+            Vector3 rotatedTowardsVector = Vector3.RotateTowards(transform.forward, vectorToTarget, step, 1);
+            rotatedTowardsVector.y = 0;
+            transform.forward = rotatedTowardsVector;
+
             cc.Move(vectorToTarget * moveSpeed * Time.deltaTime);
-            if (Vector3.Distance(transform.position, target) < 0.5f)
+            if (Vector3.Distance(transform.position, target) < 1f)
             {
                 hasTarget = false;
             }
         }
+
     }
 
-    void TakeDamage(float damage)
+    //public void useMagic()
+    //{
+    //    Vector3 offset = new Vector3(0,0,1f);
+    //    //Generic Magic
+    //    Instantiate(magic, transform.position + offset, transform.rotation);
+    //}
+
+    public void TakeDamage(float damage)
     {
         currentHealth -= damage;
         healthBar.SetHealth(currentHealth);
@@ -74,6 +98,14 @@ public class UnitScript : MonoBehaviour
         hasTarget = true;
     }
 
+    public void SetTargetAttack(Vector3 t)
+    {
+        enemyTarget = t;
+        hasTarget = true;
+        hasEnemyTarget = true;
+    }
+
+
     private void OnMouseDown()
     {
         GameManager.SharedInstance.SelectUnit(this);
@@ -84,7 +116,6 @@ public class UnitScript : MonoBehaviour
     {
         hover = true;
         SetUnitColor();
-        Debug.Log("Hovering");
     }
 
     private void OnMouseExit()
