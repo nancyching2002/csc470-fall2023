@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class EnemyScript : MonoBehaviour
 {
+    public GameObject activeRing;
+
     private State state;
     float moveSpeed = 2;
     public CharacterController cc;
+
+    public HealthBar healthBar;
 
     public bool playerWithinAttack = false;
     public bool selected = false;
 
     public float health = 100;
     public float currentHealth;
+
+    Vector3 offset = new Vector3(0,1f, 0);
 
     private enum State 
     {
@@ -27,11 +33,25 @@ public class EnemyScript : MonoBehaviour
     {
         GameManager.SharedInstance.enemies.Add(this);
         currentHealth = health;
+        healthBar.SetMaxHealth(health);
     }
 
     // Update is called once per frame
     void Update()
     {
+        Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
+        Vector3 offset = new Vector3(0,1f, 0);
+        Debug.DrawRay(transform.position+offset, forward, Color.green);
+
+        if (selected)
+        {
+            activeRing.SetActive(true);
+        }
+        else if (!selected)
+        {
+            activeRing.SetActive(false);
+        }
+
         if (currentHealth <= 0)
         {
             GameManager.SharedInstance.enemies.Remove(this);
@@ -53,16 +73,20 @@ public class EnemyScript : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
     }
 
     private void OnMouseDown()
     {
-        GameManager.SharedInstance.SelectEnemy(this);
+        if(GameManager.SharedInstance.selectedUnit != null)
+        {
+            GameManager.SharedInstance.SelectEnemy(this);
+        }
     }
 
     private void FindPlayer()
     {
-        if (Physics.Raycast(transform.position, transform.TransformDirection (Vector3.forward), out RaycastHit hitInfo, 20f))
+        if (Physics.Raycast(transform.position+offset, transform.TransformDirection (Vector3.forward), out RaycastHit hitInfo, 20f))
         {
             state = State.Target;
         }
@@ -70,7 +94,7 @@ public class EnemyScript : MonoBehaviour
     private void PlayerFound()
     {
        
-        if (Physics.Raycast(transform.position, transform.TransformDirection (Vector3.forward), out RaycastHit hitInfo, 20f))
+        if (Physics.Raycast(transform.position+offset, transform.TransformDirection (Vector3.forward), out RaycastHit hitInfo, 20f))
         {
             Vector3 playerPos = hitInfo.transform.position;
             Vector3 vectorToTarget = (playerPos - transform.position).normalized;
@@ -86,7 +110,7 @@ public class EnemyScript : MonoBehaviour
 
             float distance = Vector3.Distance(transform.position, playerPos);
 
-            if (distance < 2f)
+            if (distance < 3f)
             {
                 cc.Move(new Vector3(0, 0, 0));
                 playerWithinAttack = true;

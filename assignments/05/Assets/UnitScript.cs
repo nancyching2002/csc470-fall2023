@@ -5,23 +5,21 @@ using UnityEngine;
 public class UnitScript : MonoBehaviour
 {
     //Hover/Select color
-    public Renderer bodyRenderer;
+    public GameObject activeRing;
+    public GameObject hoverRing;
+
     public CharacterController cc;
 
-    //Magic
-    public GameObject magic;
-
+    public Animator animator;
 
     public Color selectedColor;
     public Color hoverColor;
-    Color defaultColor;
 
     float moveSpeed = 5;
     public float health = 100;
     public float currentHealth;
 
     public HealthBar healthBar;
-    float damage = 10f;
 
     bool hover = false;
     public bool selected = false;
@@ -31,10 +29,16 @@ public class UnitScript : MonoBehaviour
     bool hasTarget = false;
     bool hasEnemyTarget = false;
 
+    public bool canAttack = false;
+    public Vector3 healthTarget;
+    public bool canHeal = false;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
-        defaultColor = bodyRenderer.material.color;
+
         GameManager.SharedInstance.units.Add(this);
 
         currentHealth = health;
@@ -46,17 +50,29 @@ public class UnitScript : MonoBehaviour
         GameManager.SharedInstance.units.Remove(this);
     }
 
-
-    // Update is called once per frame
     void Update()
     {
+        // Close to health poition
+        if (Vector3.Distance(transform.position, healthTarget) < 5f)
+        {
+            canHeal = true;
+        }
+        else
+        {
+            canHeal = false;
+        }
+
         //If enemy has been clicked, check if the player is close then attack
         if (hasEnemyTarget)
         {
-            if (Vector3.Distance(transform.position, enemyTarget) < 3f)
+            if (Vector3.Distance(transform.position, enemyTarget) < 5f)
             {
                 Debug.Log("Attacking");
-                GameManager.SharedInstance.AttackEnemy();
+                canAttack = true;
+            }
+            else
+            {
+                canAttack = false;
             }
         }
 
@@ -71,24 +87,19 @@ public class UnitScript : MonoBehaviour
             transform.forward = rotatedTowardsVector;
 
             cc.Move(vectorToTarget * moveSpeed * Time.deltaTime);
+            animator.SetBool("Moving", true);
             if (Vector3.Distance(transform.position, target) < 1f)
             {
                 hasTarget = false;
+                animator.SetBool("Moving", false);
             }
         }
 
     }
 
-    //public void useMagic()
-    //{
-    //    Vector3 offset = new Vector3(0,0,1f);
-    //    //Generic Magic
-    //    Instantiate(magic, transform.position + offset, transform.rotation);
-    //}
-
     public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
+        currentHealth -= damage*Time.deltaTime*1;
         healthBar.SetHealth(currentHealth);
     }
 
@@ -128,15 +139,18 @@ public class UnitScript : MonoBehaviour
     {
         if (selected)
         {
-            bodyRenderer.material.color = selectedColor;
+            hoverRing.SetActive(false);
+            activeRing.SetActive(true);
         }
         else if (hover)
         {
-            bodyRenderer.material.color = hoverColor;
+            hoverRing.SetActive(true);
+            activeRing.SetActive(false);
         }
         else
         {
-            bodyRenderer.material.color = defaultColor;
+            hoverRing.SetActive(false);
+            activeRing.SetActive(false);
         }
     }
 }
