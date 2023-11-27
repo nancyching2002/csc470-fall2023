@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
-
+    public GameObject UIManager;
     public static GameManager SharedInstance;
     public List<UnitScript> units = new List<UnitScript>();
     public GameObject unitPrefab;
@@ -29,12 +31,16 @@ public class GameManager : MonoBehaviour
     //Special attack times
     public float lightiningCooldown = 5f;
     private float lightiningNextFireTime = 0;
+    public  float lightiningCooldownTimer = 0f;
 
     public float fireCooldown = 10f;
     private float fireNextFireTime = 0;
+    public  float fireCooldownTimer = 0f;
 
     public GameObject magicCircle1;
     public GameObject magicCircle2;
+
+    public bool playerDead = false;
     
     void Awake()
     {
@@ -53,6 +59,19 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (selectedUnit.dead)
+        {
+            playerDead = true;
+        }
+        if (lightiningCooldownTimer > 1)
+        {
+            lightiningCooldownTimer -= Time.deltaTime;
+        }
+
+        if (fireCooldownTimer > 1)
+        {
+            fireCooldownTimer -= Time.deltaTime;
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -79,6 +98,7 @@ public class GameManager : MonoBehaviour
                         particles.SetActive(false);
                         if (selectedUnit.canAttack == true && Time.time > attackNext)
                         {
+                            selectedUnit.animator.SetTrigger("Fighting");
                             AttackEnemy();
                             attackNext = Time.time + attackCooldown;
                         }
@@ -107,18 +127,40 @@ public class GameManager : MonoBehaviour
 
 
         //Special Attacks - lightining and fire
-        if (Time.time > lightiningNextFireTime && Input.GetKeyDown(KeyCode.Alpha1) && selectedUnit != null)
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            specialOne();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            specialTwo();
+        }
+    }
+
+    public void restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void specialOne()
+    {
+        if (Time.time > lightiningNextFireTime && selectedUnit != null && selectedEnemy)
         {
             GameObject magic1 = Instantiate(magicCircle1, selectedEnemy.transform.position, selectedEnemy.transform.rotation);
-            selectedEnemy.TakeDamage(50f);   
+            selectedEnemy.TakeDamage(50f);  
             lightiningNextFireTime = Time.time + lightiningCooldown;
+            lightiningCooldownTimer += 5;
             Destroy(magic1, 1f);
         }
-        if (Time.time > fireNextFireTime && Input.GetKeyDown(KeyCode.Alpha2) && selectedUnit != null)
+    }
+    public void specialTwo()
+    {
+        if (Time.time > fireNextFireTime && selectedUnit != null && selectedEnemy)
         {
             GameObject magic1 = Instantiate(magicCircle2, selectedEnemy.transform.position, selectedEnemy.transform.rotation);
             selectedEnemy.TakeDamage(100f);   
             fireNextFireTime = Time.time + fireCooldown;
+            fireCooldownTimer += 10f;
             Destroy(magic1, 1f);
         }
     }

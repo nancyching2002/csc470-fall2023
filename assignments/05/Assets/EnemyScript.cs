@@ -6,6 +6,8 @@ public class EnemyScript : MonoBehaviour
 {
     public GameObject activeRing;
 
+    public Animator animator;
+
     private State state;
     float moveSpeed = 2;
     public CharacterController cc;
@@ -96,6 +98,7 @@ public class EnemyScript : MonoBehaviour
        
         if (Physics.Raycast(transform.position+offset, transform.TransformDirection (Vector3.forward), out RaycastHit hitInfo, 20f))
         {
+            animator.SetBool("Moving", true);
             Vector3 playerPos = hitInfo.transform.position;
             Vector3 vectorToTarget = (playerPos - transform.position).normalized;
             
@@ -112,12 +115,16 @@ public class EnemyScript : MonoBehaviour
 
             if (distance < 3f)
             {
+                animator.SetBool("Moving", false);
                 cc.Move(new Vector3(0, 0, 0));
                 playerWithinAttack = true;
+                animator.SetBool("Fighting", true);
                 GameManager.SharedInstance.AttackPlayer();
             }
             else 
             {
+                animator.SetBool("Moving", true);
+                animator.SetBool("Fighting", false);
                 playerWithinAttack = false;
             }
 

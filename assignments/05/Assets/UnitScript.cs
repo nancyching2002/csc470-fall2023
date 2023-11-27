@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UnitScript : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class UnitScript : MonoBehaviour
     public Vector3 healthTarget;
     public bool canHeal = false;
 
+    public bool dead = false;
+
 
 
     // Start is called before the first frame update
@@ -50,48 +53,66 @@ public class UnitScript : MonoBehaviour
         GameManager.SharedInstance.units.Remove(this);
     }
 
-    void Update()
-    {
-        // Close to health poition
-        if (Vector3.Distance(transform.position, healthTarget) < 5f)
+    //Get to the end 
+        void OnControllerColliderHit(ControllerColliderHit collide)
         {
-            canHeal = true;
-        }
-        else
-        {
-            canHeal = false;
+            if (collide.gameObject.CompareTag("Trigger"))
+            {
+                SceneManager.LoadScene("Won", LoadSceneMode.Single);
+            }
         }
 
-        //If enemy has been clicked, check if the player is close then attack
-        if (hasEnemyTarget)
+    void Update()
+    {
+        //Death
+        if (currentHealth < 1)
         {
-            if (Vector3.Distance(transform.position, enemyTarget) < 5f)
+            animator.SetBool("Dead", true);
+            dead = true;
+        }
+
+        if (!dead) 
+        {
+            // Close to health poition
+            if (Vector3.Distance(transform.position, healthTarget) < 5f)
             {
-                Debug.Log("Attacking");
-                canAttack = true;
+                canHeal = true;
             }
             else
             {
-                canAttack = false;
+                canHeal = false;
             }
-        }
 
-        //Move
-        if (hasTarget)
-        {
-            Vector3 vectorToTarget = (target - transform.position).normalized;
-
-            float step = 5 * Time.deltaTime;
-            Vector3 rotatedTowardsVector = Vector3.RotateTowards(transform.forward, vectorToTarget, step, 1);
-            rotatedTowardsVector.y = 0;
-            transform.forward = rotatedTowardsVector;
-
-            cc.Move(vectorToTarget * moveSpeed * Time.deltaTime);
-            animator.SetBool("Moving", true);
-            if (Vector3.Distance(transform.position, target) < 1f)
+            //If enemy has been clicked, check if the player is close then attack
+            if (hasEnemyTarget)
             {
-                hasTarget = false;
-                animator.SetBool("Moving", false);
+                if (Vector3.Distance(transform.position, enemyTarget) < 5f)
+                {
+                    canAttack = true;
+                }
+                else
+                {
+                    canAttack = false;
+                }
+            }
+
+            //Move
+            if (hasTarget)
+            {
+                Vector3 vectorToTarget = (target - transform.position).normalized;
+
+                float step = 5 * Time.deltaTime;
+                Vector3 rotatedTowardsVector = Vector3.RotateTowards(transform.forward, vectorToTarget, step, 1);
+                rotatedTowardsVector.y = 0;
+                transform.forward = rotatedTowardsVector;
+
+                cc.Move(vectorToTarget * moveSpeed * Time.deltaTime);
+                animator.SetBool("Moving", true);
+                if (Vector3.Distance(transform.position, target) < 1f)
+                {
+                    hasTarget = false;
+                    animator.SetBool("Moving", false);
+                }
             }
         }
 
