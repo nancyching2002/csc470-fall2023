@@ -137,8 +137,11 @@ public class GameManager : MonoBehaviour
 
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Key"))
                 {
-                    selectedUnit.hasKey = true;
-                    Destroy(keyPrefab);
+                    if (Vector3.Distance(selectedUnit.transform.position, hit.point) < 4f)
+                    {
+                        selectedUnit.hasKey = true;
+                        keyPrefab.SetActive(false);
+                    }
                 }
 
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Health"))

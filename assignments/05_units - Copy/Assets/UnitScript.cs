@@ -49,6 +49,8 @@ public class UnitScript : MonoBehaviour
             dead = true;
         }
 
+        if (!dead)
+        {
 
         // Close to health poition
         if (Vector3.Distance(transform.position, healthTarget) < 5f)
@@ -91,7 +93,7 @@ public class UnitScript : MonoBehaviour
                     animator.SetBool("Moving", false);
                 }
             }
-        
+        }
 
     }
 
