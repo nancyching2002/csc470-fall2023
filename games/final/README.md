@@ -1,3 +1,4 @@
+Link to Website file: https://github.com/nancyching2002/csc470-fall2023/blob/main/Website_Final/NancyChing_GameProgrammingFinalWebsite.html
 
 # Game Programming Final Write Up - Nancy Ching
 
@@ -54,4 +55,3 @@ Making a more polished story: maybe the player is a wannabe mercenary and is on 
 ![3a4c2919-929b-430e-8c4d-8187b2c09d6f](https://github.com/nancyching2002/csc470-fall2023/assets/106937449/44e67700-6939-4f8c-a76e-5a5f98221dd7)
 
 
-Link to Website file: https://github.com/nancyching2002/csc470-fall2023/blob/main/Website_Final/NancyChing_GameProgrammingFinalWebsite.html
